@@ -13,7 +13,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="items-center h-screen  justify-start   flex bg-[#0090CD] flex-col">
+      <main className="items-center h-screen  justify-start  w-1/2 flex bg-[#0090CD] flex-col">
        
         <div className="z-0 rounded-full h-[300px] w-[300px] bg-[#87D2EC] absolute -top-240 left-[130px]"></div>
         <div className="z-0 rounded-full h-[300px] w-[300px] bg-[#87D2EC] absolute top-1/3 right-[100px]"></div>
