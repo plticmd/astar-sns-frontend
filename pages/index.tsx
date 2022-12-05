@@ -51,7 +51,7 @@ const Home: NextPage = () => {
           <div>ON ASTAR</div>
         </div>  
         <button
-          className="z-10 text-l text-white items-center flex justify-center h-10 w-50 bg-[#003AD0] hover:bg-blue-600  py- px-4 rounded-full"
+          className="z-10 text-3s text-white items-center flex justify-center h-20 w-50 bg-[#003AD0] hover:bg-blue-600  py- px-4 rounded-full"
           onClick={() => {
             router.push("home");
           }}
