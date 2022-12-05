@@ -43,22 +43,6 @@ const Home: NextPage = () => {
             width={30}
             height={30}
           />
-          
-        </div>
-        <div className="z-10 mt-20 mb-10 text-s items-center flex flex-col text-[#0009DC]">
-          <div>SHARE YOUR</div>
-          <div>WONDERFUL DAILY LIFE</div>
-          <div>ON ASTAR</div>
-        </div>  
-        <button
-          className="z-10 text-l text-white items-center flex justify-center h-10 w-50 bg-[#003AD0] hover:bg-blue-600  py- px-4 rounded-full"
-          onClick={() => {
-            router.push("home");
-          }}
-        >
-          Connect Wallet
-        </button>
-        
         <Image
           className="rotate-[17deg] h-14 w-16 top-16 left-[530px] absolute "
           src="/cross_star_6_logo-removebg.png"
@@ -80,6 +64,20 @@ const Home: NextPage = () => {
           width={70}
           height={70}
         />
+           </div>
+        <div className="z-10 mt-20 mb-10 text-s items-center flex flex-col text-[#0009DC]">
+          <div>SHARE YOUR</div>
+          <div>WONDERFUL DAILY LIFE</div>
+          <div>ON ASTAR</div>
+        </div>
+         <button
+          className="z-10 text-l text-white items-center flex justify-center h-10 w-50 bg-[#003AD0] hover:bg-blue-600  py- px-4 rounded-full"
+          onClick={() => {
+            router.push("home");
+          }}
+        >
+          Connect Wallet
+        </button>
         <Image
           className="rotate-[35deg] h-10 w-10 fill-black bottom-100 left-1/3 absolute "
           src="/cross_star_2_logo-removebg.png"
