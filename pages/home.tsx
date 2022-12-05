@@ -1,0 +1,141 @@
+import { ApiPromise } from "@polkadot/api";
+import type { InjectedAccountWithMeta } from "@polkadot/extension-inject/types";
+import React, { useEffect, useState } from "react";
+
+import { PostButton } from "../components/atoms/postButton";
+import BottomNavigation from "../components/bottomNavigation";
+import Post from "../components/post";
+import PostModal from "../components/postModal";
+import TopBar from "../components/topBar";
+import { connectToContract } from "../hooks/connect";
+import { balenceOf, distributeReferLikes, transfer } from "../hooks/FT";
+import type { PostType } from "../hooks/postFunction";
+import { getGeneralPost } from "../hooks/postFunction";
+import {
+  checkCreatedInfo,
+  createProfile,
+  getProfileForHome,
+} from "../hooks/profileFunction";
+
+const sleep = (waitMsec) => {
+  var startMsec = new Date();
+  while (new Date() - startMsec < waitMsec);
+};
+
+export default function home() {
+  const [api, setApi] = useState<ApiPromise>();
+
+  const [isCreatedProfile, setIsCreatedProfile] = useState(true);
+  const [isCreatedFnRun, setIsCreatedFnRun] = useState(false);
+  const [showNewPostModal, setShowNewPostModal] = useState(false);
+  const [isSetup, setIsSetup] = useState(false);
+  const [isDistributed, setIsDistributed] = useState(false);
+
+  const [imgUrl, setImgUrl] = useState("");
+  const [accountList, setAccountList] = useState<InjectedAccountWithMeta[]>([]);
+  const [actingAccount, setActingAccount] = useState<InjectedAccountWithMeta>();
+  const [generalPostList, setGeneralPostList] = useState<PostType[]>([]);
+  const [balance, setBalance] = useState<string>("0");
+
+  useEffect(() => {
+    connectToContract({
+      api: api,
+      accountList: accountList,
+      actingAccount: actingAccount!,
+      isSetup: isSetup,
+      setApi: setApi,
+      setAccountList: setAccountList,
+      setActingAccount: setActingAccount!,
+      setIsSetup: setIsSetup,
+    });
+    sleep(500);
+  }, []);
+
+  useEffect(() => {
+    if (!isSetup) return;
+    console.log("after isSetup");
+    
+    getProfileForHome({
+      api: api!,
+      userId: actingAccount?.address!,
+      setImgUrl: setImgUrl,
+    });
+    sleep(500);
+
+    balenceOf({
+      api: api,
+      actingAccount: actingAccount!,
+      setBalance: setBalance,
+    });
+
+    sleep(500);
+
+    getGeneralPost({ api: api!, setGeneralPostList: setGeneralPostList });
+    sleep(500);
+    console.log("generalPostList: " + JSON.stringify(generalPostList));
+
+    if (isDistributed) return;
+    distributeReferLikes({
+      api: api,
+      actingAccount: actingAccount!,
+    });
+    sleep(500);
+
+    setIsDistributed(true);
+    if (isCreatedFnRun) return;
+    checkCreatedInfo({
+      api: api,
+      userId: actingAccount?.address!,
+      setIsCreatedProfile: setIsCreatedProfile,
+    });
+    sleep(500);
+
+    if (isCreatedProfile) return;
+    createProfile({ api: api, actingAccount: actingAccount! });
+    sleep(500);
+
+    setIsCreatedFnRun(true);
+  }, [actingAccount]);
+
+  return (
+    <div className="flex justify-center items-center bg-gray-200 w-screen h-screen relative">
+     
+      <main className="items-center justify-center h-screen  flex bg-white flex-col">
+      <TopBar
+          idList={accountList}
+          imgUrl={imgUrl}
+          setActingAccount={setActingAccount}
+          balance={balance}
+        />
+        <PostModal
+          isOpen={showNewPostModal}
+          afterOpenFn={setShowNewPostModal}
+          api={api!}
+          actingAccount={actingAccount!}
+        />
+        
+        <div className="flex-1 overflow-scroll">
+          {generalPostList.map((post) => (
+            <Post
+              name={post.name}
+              time={post.createdTime}
+              description={post.description}
+              num_of_likes={post.numOfLikes}
+              user_img_url={post.userImgUrl}
+              post_img_url={post.imgUrl}
+              userId={post.userId}
+              postId={post.postId}
+              actingAccount={actingAccount}
+              api={api}
+            />
+          ))}
+        </div>
+        <PostButton setShowNewPostModal={setShowNewPostModal} />
+        <div className="w-full">
+          <BottomNavigation api={api} />
+        </div>
+       
+      </main>
+    </div>
+  );
+}
