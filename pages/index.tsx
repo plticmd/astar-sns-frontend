@@ -74,7 +74,7 @@ const Home: NextPage = () => {
           height={100}
         />
         <Image
-          className="rotate-[340deg] h-100 w-30 bottom-30 left-1/3 absolute "
+          className="rotate-[340deg] h-100 w-30 bottom-10 left-1/3 absolute "
           src="/cross_star_6_logo-removebg.png"
           alt="astar_logo"
           width={70}
